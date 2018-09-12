@@ -158,6 +158,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="compression.cs" />
+    <Compile Include="FileOperation.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
