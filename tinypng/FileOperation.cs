@@ -16,6 +16,7 @@ public partial class FileGet
     /// <returns>List<FileInfo></returns>
     public static List<FileInfo> getFile(string path, string extName)
     {
+        lst.Clear();
         getdir(path, extName);
         return lst;
     }
@@ -38,7 +39,10 @@ public partial class FileGet
                 {
                     if (extName.ToLower().IndexOf(f.Extension.ToLower()) >= 0)
                     {
-                        lst.Add(f);
+                        if (System.Math.Ceiling(f.Length/1024.0) > 20)
+                        {
+                            lst.Add(f);
+                        }
                     }
                 }
                 foreach (string d in dir)

@@ -9,33 +9,39 @@ namespace tinypng
 {
     class compression
     {
-        private string key;
+        private static Dictionary<string,bool> key;
 
-        public string Key
+        static compression()
         {
-            get
-            {
-                return key;
-            }
-
-            set
-            {
-                key = value;
-            }
+            key = new Dictionary<string, bool>();
+            key["Wud9BHyk6PGEALoQJ94O00HHrkfFkAky"] = false;
+            key["EkgWF0hqmlEyr36s1Ni7OgpS5KO3KFUs"] = false;
         }
 
-        public async Task CheckKey()
+        public static string GetUnusedKeys()
         {
-            try
+            string str = string.Empty;
+            foreach (var VARIABLE in key)
             {
-                Tinify.Key = "Wud9BHyk6PGEALoQJ94O00HHrkfFkAky";
-                await Tinify.Validate();
+                if (!VARIABLE.Value)
+                {
+                    str = VARIABLE.Key;
+                }
             }
-            catch (System.Exception e)
+            return str;
+        }
+        public static void CheckKey()
+        {
+            string zcf = GetUnusedKeys();
+            if (zcf != String.Empty)
             {
-                Console.WriteLine(e.Message);
-                Console.ReadLine();
-                // Validation of API key failed.
+                Tinify.Key = zcf;
+            }
+            else
+            {
+                Console.WriteLine("keys已经使用完成请添加可用的key");
+                Console.ReadKey();
+                return;
             }
         }
         public int GeNumberOfCompressions()
@@ -61,6 +67,9 @@ namespace tinypng
             catch (AccountException e)
             {
                 System.Console.WriteLine("The error message is:key压缩数量已达到上限 " + e.Message);
+                key[Tinify.Key] = true;
+                CheckKey();
+                compressionPng(path, claa);
                 // Verify your API key and account limit.
             }
             catch (ClientException e)
@@ -76,6 +85,8 @@ namespace tinypng
             catch (ConnectionException e)
             {
                 Console.WriteLine("无法发送请求，因为连接到Tinify API时出现问题。您应该验证您的网络连接。重试请求是安全的。");
+
+                compressionPng(path, claa);
                 // A network connection error occurred.
             }
             catch (System.Exception e)

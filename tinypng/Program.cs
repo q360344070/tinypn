@@ -13,27 +13,35 @@ namespace tinypng
         private static string path;
         static void Main(string[] args)
         {
-            path = "E:/ShanHe1.0.1/Assets/Models";
+            path = "E:/ShanHe1.0.1/Assets/Textures";
             compression pngco = new compression();
-            pngco.CheckKey().Wait();
-
+            //compression.CheckKey().Wait();
+            compression.CheckKey();
             int k = pngco.GeNumberOfCompressions();
             List< FileInfo > keList= FileGet.getFile(path, ".png.jpg");
             int ke = 0;
-            int index = 0;
+            int index = -1;
             for (int i = 0; i < keList.Count; i++)
             {
-                Task tes=Task.Run(() =>
+                //Thread threadB = new Thread(
+                //() => {
+                //    index++;
+                //    if (index < keList.Count)
+                //    {
+                //        compression.compressionPng(keList[index].FullName, delegate ()
+                //        {
+                //            ke++;
+                //            Console.WriteLine("已经压缩完成" + ke);
+                //        });
+                //    }
+                //}
+                //);
+                //threadB.Start();
+                compression.compressionPng(keList[i].FullName, delegate ()
                 {
-                    FileInfo tanseInfo = keList[index];
-                    compression.compressionPng(tanseInfo.FullName, delegate ()
-                    {
-                        ke++;
-                        Console.WriteLine("已经压缩完成" + ke);
-                    });
-                    index++;
-                    Console.WriteLine("启动Task=" + tanseInfo.FullName);
-                });
+                    ke++;
+                    Console.WriteLine("已经压缩完成" + ke);
+                }).Wait();
             }
             while (ke < keList.Count - 1)
             {
