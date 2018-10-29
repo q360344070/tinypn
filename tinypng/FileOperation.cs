@@ -29,25 +29,48 @@ public partial class FileGet
     {
         try
         {
-            string[] dir = Directory.GetDirectories(path); //文件夹列表   
-            DirectoryInfo fdir = new DirectoryInfo(path);
-            FileInfo[] file = fdir.GetFiles();
-            //FileInfo[] file = Directory.GetFiles(path); //文件列表   
-            if (file.Length != 0 || dir.Length != 0) //当前目录文件或文件夹不为空                   
+            if (File.Exists(path))
             {
-                foreach (FileInfo f in file) //显示当前目录所有文件   
+                string finame = Path.GetFileName(path);
+                if (File.Exists(path))
                 {
-                    if (extName.ToLower().IndexOf(f.Extension.ToLower()) >= 0)
+                    DirectoryInfo fdir = new DirectoryInfo(path + "/../");
+                    FileInfo[] file = fdir.GetFiles();
+                    for (int i = 0; i < file.Length; i++)
                     {
-                        if (System.Math.Ceiling(f.Length/1024.0) > 20)
+                        if (finame == file[i].Name)
                         {
-                            lst.Add(f);
+                            lst.Add(file[i]);
                         }
                     }
                 }
-                foreach (string d in dir)
+            }
+            else
+            {
+                string[] dir = Directory.GetDirectories(path); //文件夹列表   
+                DirectoryInfo fdir = new DirectoryInfo(path);
+                FileInfo[] file = fdir.GetFiles();
+                //FileInfo[] file = Directory.GetFiles(path); //文件列表   
+                if (file.Length != 0 || dir.Length != 0) //当前目录文件或文件夹不为空                   
                 {
-                    getdir(d, extName);//递归   
+                    foreach (FileInfo f in file) //显示当前目录所有文件   
+                    {
+                        string[] exstrshuz = extName.Split('|');
+                        for (int i = 0; i < exstrshuz.Length; i++)
+                        {
+                            if (f.Name.EndsWith(exstrshuz[i]))
+                            {
+                                if (System.Math.Ceiling(f.Length / 1024.0) > 20)
+                                {
+                                    lst.Add(f);
+                                }
+                            }
+                        }
+                    }
+                    foreach (string d in dir)
+                    {
+                        getdir(d, extName); //递归   
+                    }
                 }
             }
         }
