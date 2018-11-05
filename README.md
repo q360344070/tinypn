@@ -4,4 +4,4 @@
 compression.cs有tinypng API密钥
 API密钥需要自己注册 https://tinypng.com/developers/reference/dotnet
 不知道为什么没办法实现多线程提交压缩。
-如果知道请告诉我下原因  联系方式 qq 360344070  谢谢
+如果知道请告诉我下原因
